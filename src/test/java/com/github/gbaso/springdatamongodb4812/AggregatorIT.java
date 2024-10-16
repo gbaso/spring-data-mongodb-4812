@@ -46,16 +46,7 @@ class AggregatorIT {
 
     assertThat(mongoTemplate.findOne(new Query(), MyEntity.class, "myEntityWithUUID"))
         .extracting(MyEntity::id)
-        .is(new Condition<>(
-            id -> {
-              try {
-                UUID.fromString(id);
-                return true;
-              } catch (IllegalArgumentException e) {
-                return false;
-              }
-            },
-            "a valid UUID"));
+        .is(aValidUUID());
   }
 
   @Test
@@ -65,16 +56,7 @@ class AggregatorIT {
 
     assertThat(mongoTemplate.findOne(new Query(), MyEntity.class, "myEntityWithUUID"))
         .extracting(MyEntity::id)
-        .is(new Condition<>(
-            id -> {
-              try {
-                UUID.fromString(id);
-                return true;
-              } catch (IllegalArgumentException e) {
-                return false;
-              }
-            },
-            "a valid UUID"));
+        .is(aValidUUID());
   }
 
   @Test
@@ -84,15 +66,19 @@ class AggregatorIT {
 
     assertThat(mongoTemplate.findOne(new Query(), MyEntity.class, "myEntityWithUUID"))
         .extracting(MyEntity::id)
-        .is(new Condition<>(
-            id -> {
-              try {
-                UUID.fromString(id);
-                return true;
-              } catch (IllegalArgumentException e) {
-                return false;
-              }
-            },
-            "a valid UUID"));
+        .is(aValidUUID());
+  }
+
+  private static Condition<String> aValidUUID() {
+    return new Condition<>(
+        id -> {
+          try {
+            UUID.fromString(id);
+            return true;
+          } catch (IllegalArgumentException e) {
+            return false;
+          }
+        },
+        "a valid UUID");
   }
 }
